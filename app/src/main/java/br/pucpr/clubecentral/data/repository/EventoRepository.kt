@@ -1,25 +1,14 @@
 package br.pucpr.clubecentral.data.repository
 
-import br.pucpr.clubecentral.data.local.EventoDao
 import br.pucpr.clubecentral.model.Evento
 
-class EventoRepository(
-    private val eventoDao: EventoDao
-) {
+interface EventoRepository {
 
-    suspend fun listar(): List<Evento> {
-        return eventoDao.listar()
-    }
+    suspend fun listar(): List<Evento>
 
-    suspend fun inserir(evento: Evento) {
-        eventoDao.inserir(evento)
-    }
+    suspend fun inserir(evento: Evento)
 
-    suspend fun atualizar(evento: Evento) {
-        eventoDao.atualizar(evento)
-    }
+    suspend fun atualizar(evento: Evento)
 
-    suspend fun excluir(evento: Evento) {
-        eventoDao.excluir(evento)
-    }
+    suspend fun excluir(evento: Evento)
 }

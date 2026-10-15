@@ -1,19 +1,20 @@
 package br.pucpr.clubecentral.ui.viewmodel
 
-import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.pucpr.clubecentral.data.local.AppDatabase
 import br.pucpr.clubecentral.data.repository.EventoRepository
 import br.pucpr.clubecentral.model.Evento
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EventosViewModel(application: Application) : AndroidViewModel(application) {
-
+@HiltViewModel
+class EventosViewModel @Inject constructor(
     private val repository: EventoRepository
+) : ViewModel() {
 
     var nome by mutableStateOf("")
         private set
@@ -31,11 +32,6 @@ class EventosViewModel(application: Application) : AndroidViewModel(application)
         private set
 
     init {
-        val dao = AppDatabase
-            .getDatabase(application)
-            .eventoDao()
-
-        repository = EventoRepository(dao)
         carregar()
     }
 
@@ -61,7 +57,6 @@ class EventosViewModel(application: Application) : AndroidViewModel(application)
         }
 
         viewModelScope.launch {
-
             val novoEvento = Evento(
                 nome = novoNome,
                 data = novaData,
@@ -77,7 +72,6 @@ class EventosViewModel(application: Application) : AndroidViewModel(application)
 
     fun iniciarEdicao(evento: Evento) {
         eventoEditando = evento
-
         nome = evento.nome
         data = evento.data
         descricao = evento.descricao
@@ -95,7 +89,6 @@ class EventosViewModel(application: Application) : AndroidViewModel(application)
         }
 
         viewModelScope.launch {
-
             val eventoAtualizado = evento.copy(
                 nome = novoNome,
                 data = novaData,
@@ -110,7 +103,6 @@ class EventosViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun cancelarEdicao() {
-        eventoEditando = null
         limparCampos()
     }
 
