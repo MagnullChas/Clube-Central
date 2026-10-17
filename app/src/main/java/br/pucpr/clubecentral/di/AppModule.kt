@@ -3,6 +3,7 @@ package br.pucpr.clubecentral.di
 import android.content.Context
 import br.pucpr.clubecentral.data.local.AppDatabase
 import br.pucpr.clubecentral.data.local.EventoDao
+import br.pucpr.clubecentral.data.local.PerfilDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,5 +28,12 @@ object AppModule {
         database: AppDatabase
     ): EventoDao {
         return database.eventoDao()
+    }
+
+    @Provides
+    fun providePerfilDao(
+        database: AppDatabase
+    ): PerfilDao {
+        return database.perfilDao()
     }
 }

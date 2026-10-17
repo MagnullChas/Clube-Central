@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.pucpr.clubecentral.ui.screens.EventosScreen
+import br.pucpr.clubecentral.ui.screens.PerfilScreen
 
 @OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
@@ -26,7 +27,13 @@ fun ClubeCentralApp() {
     val rotaAtual = entradaAtual?.destination?.route
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Clube Central") }) },
+        topBar = {
+            if (rotaAtual != "perfil") {
+                TopAppBar(
+                    title = { Text("Clube Central") }
+                )
+            }
+        },
         bottomBar = {
             NavigationBar {
                 NavigationBarItem(
@@ -48,9 +55,9 @@ fun ClubeCentralApp() {
                 )
 
                 NavigationBarItem(
-                    selected = rotaAtual == "tela 4",
-                    onClick = { navController.navigate("tela 4") { launchSingleTop = true } },
-                    icon = { Text("4") }, label = { Text("Tela 04") }
+                    selected = rotaAtual == "perfil",
+                    onClick = { navController.navigate("perfil") { launchSingleTop = true } },
+                    icon = { Text("P") }, label = { Text("Perfil") }
                 )
 
                 NavigationBarItem(
@@ -84,8 +91,8 @@ fun ClubeCentralApp() {
             }
 
             // tela 4
-            composable("tela 4") {
-                Box {}
+            composable("perfil") {
+                PerfilScreen{}
             }
 
             // tela 5

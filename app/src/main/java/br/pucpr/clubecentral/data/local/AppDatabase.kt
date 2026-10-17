@@ -6,17 +6,39 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import br.pucpr.clubecentral.model.Evento
+import br.pucpr.clubecentral.model.PerfilPreferencias
+import androidx.room.migration.Migration
 
 @Database(
-    entities = [Evento::class],
-    version = 1,
+    entities = [
+        Evento::class,
+        PerfilPreferencias::class
+    ],
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun eventoDao(): EventoDao
+    abstract fun perfilDao(): PerfilDao
 
     companion object {
+
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """
+            CREATE TABLE IF NOT EXISTS `perfil_preferencias` (
+                `id` INTEGER NOT NULL,
+                `aparencia` TEXT NOT NULL,
+                `idioma` TEXT NOT NULL,
+                `notificacoesAtivas` INTEGER NOT NULL,
+                PRIMARY KEY(`id`)
+            )
+            """.trimIndent()
+                )
+            }
+        }
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
@@ -27,6 +49,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "eventos.db"
                 )
+                    .addMigrations(MIGRATION_1_2)
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
