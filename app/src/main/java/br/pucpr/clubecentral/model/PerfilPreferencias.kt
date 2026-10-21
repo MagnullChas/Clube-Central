@@ -1,4 +1,3 @@
-
 package br.pucpr.clubecentral.model
 
 import androidx.room.Entity

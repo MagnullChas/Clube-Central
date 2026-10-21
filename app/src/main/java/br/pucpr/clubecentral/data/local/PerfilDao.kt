@@ -1,4 +1,3 @@
-
 package br.pucpr.clubecentral.data.local
 
 import androidx.room.Dao

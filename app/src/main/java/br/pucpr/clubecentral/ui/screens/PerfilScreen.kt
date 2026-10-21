@@ -14,36 +14,35 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material3.Icon
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.RadioButton
+import br.pucpr.clubecentral.ui.viewmodel.AuthViewModel
 import br.pucpr.clubecentral.ui.viewmodel.PerfilViewModel
-
 
 private val FundoPerfil = Color(0xFFFAFAFA)
 private val BordaPerfil = Color(0xFFD2D2D2)
@@ -51,11 +50,14 @@ private val TextoSecundario = Color(0xFF777777)
 
 @Composable
 fun PerfilScreen(
+    authViewModel: AuthViewModel,
+    onSair: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: PerfilViewModel = hiltViewModel(),
-    onSair: () -> Unit = {}
+    viewModel: PerfilViewModel = hiltViewModel()
 ) {
     var dialogoAtual by remember { mutableStateOf<String?>(null) }
+
+    val usuario = authViewModel.usuarioAutenticado
 
     Column(
         modifier = modifier
@@ -85,8 +87,8 @@ fun PerfilScreen(
         }
 
         CartaoPerfil(
-            nome = viewModel.nome,
-            email = viewModel.email,
+            nome = usuario?.nome ?: "Usuário",
+            email = usuario?.email ?: "",
             onAlterarFoto = {
                 dialogoAtual = "foto"
             }
@@ -103,15 +105,21 @@ fun PerfilScreen(
                     onClick = { dialogoAtual = "dados" }
                 )
 
+                DivisorPerfil()
+
                 ItemConfiguracao(
                     titulo = "Notificações",
                     onClick = { dialogoAtual = "notificacoes" }
                 )
 
+                DivisorPerfil()
+
                 ItemConfiguracao(
                     titulo = "Privacidade e segurança",
                     onClick = { dialogoAtual = "privacidade" }
                 )
+
+                DivisorPerfil()
 
                 ItemConfiguracao(
                     titulo = "Clubes e permissões",
@@ -131,6 +139,8 @@ fun PerfilScreen(
                     valor = viewModel.aparencia,
                     onClick = { dialogoAtual = "aparencia" }
                 )
+
+                DivisorPerfil()
 
                 ItemConfiguracao(
                     titulo = "Idioma",
@@ -152,13 +162,14 @@ fun PerfilScreen(
         Spacer(modifier = Modifier.height(4.dp))
     }
 
-
     when (dialogoAtual) {
         "dados" -> {
             EditarDadosDialog(
-                nomeAtual = viewModel.nome,
-                emailAtual = viewModel.email,
+                nomeAtual = usuario?.nome ?: "",
+                emailAtual = usuario?.email ?: "",
                 onSalvar = { nome, email ->
+                    // A persistência dos dados da conta será
+                    // implementada na próxima etapa.
                     viewModel.alterarDadosPessoais(nome, email)
                     dialogoAtual = null
                 },
@@ -198,10 +209,11 @@ fun PerfilScreen(
                 title = { Text("Notificações") },
                 text = {
                     Text(
-                        if (viewModel.notificacoesAtivas)
+                        if (viewModel.notificacoesAtivas) {
                             "As notificações estão habilitadas nas preferências."
-                        else
+                        } else {
                             "As notificações estão desabilitadas nas preferências."
+                        }
                     )
                 },
                 confirmButton = {
@@ -214,15 +226,18 @@ fun PerfilScreen(
                         }
                     ) {
                         Text(
-                            if (viewModel.notificacoesAtivas)
+                            if (viewModel.notificacoesAtivas) {
                                 "Desativar"
-                            else
+                            } else {
                                 "Ativar"
+                            }
                         )
                     }
                 },
                 dismissButton = {
-                    TextButton(onClick = { dialogoAtual = null }) {
+                    TextButton(
+                        onClick = { dialogoAtual = null }
+                    ) {
                         Text("Cancelar")
                     }
                 }
@@ -232,7 +247,7 @@ fun PerfilScreen(
         "privacidade" -> {
             MensagemDialog(
                 titulo = "Privacidade e segurança",
-                mensagem = "Esta área poderá reunir as opções de proteção e privacidade da sua conta quando o cadastro estiver implementado.",
+                mensagem = "Esta área poderá reunir as opções de proteção e privacidade da sua conta.",
                 onFechar = { dialogoAtual = null }
             )
         }
@@ -240,7 +255,7 @@ fun PerfilScreen(
         "clubes" -> {
             MensagemDialog(
                 titulo = "Clubes e permissões",
-                mensagem = "Aqui poderão ser exibidos os clubes associados ao usuário e suas permissões. Essa funcionalidade depende da implementação dos dados de associação aos clubes.",
+                mensagem = "Aqui poderão ser exibidos os clubes associados ao usuário e suas permissões.",
                 onFechar = { dialogoAtual = null }
             )
         }
@@ -258,21 +273,28 @@ fun PerfilScreen(
                 onDismissRequest = { dialogoAtual = null },
                 title = { Text("Sair da conta") },
                 text = {
-                    Text(
-                        "O aplicativo ainda não possui autenticação. " +
-                                "Não há uma sessão para encerrar."
-                    )
+                    Text("Deseja realmente encerrar sua sessão?")
                 },
                 confirmButton = {
-                    TextButton(onClick = { dialogoAtual = null }) {
-                        Text("Entendi")
+                    TextButton(
+                        onClick = {
+                            dialogoAtual = null
+                            onSair()
+                        }
+                    ) {
+                        Text("Sair")
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = { dialogoAtual = null }
+                    ) {
+                        Text("Cancelar")
                     }
                 }
             )
         }
     }
-
-
 }
 
 @Composable
@@ -325,9 +347,7 @@ private fun CartaoPerfil(
             color = TextoSecundario
         )
 
-        TextButton(
-            onClick = onAlterarFoto
-        ) {
+        TextButton(onClick = onAlterarFoto) {
             Text(
                 text = "Alterar foto",
                 color = Color.Black
@@ -335,7 +355,6 @@ private fun CartaoPerfil(
         }
     }
 }
-
 
 @Composable
 private fun SelecaoDialog(
@@ -379,7 +398,6 @@ private fun SelecaoDialog(
     )
 }
 
-
 @Composable
 private fun EditarDadosDialog(
     nomeAtual: String,
@@ -422,7 +440,7 @@ private fun EditarDadosDialog(
                 enabled = nome.isNotBlank() &&
                         android.util.Patterns.EMAIL_ADDRESS
                             .matcher(email.trim()).matches(),
-                onClick = { onSalvar(nome, email) }
+                onClick = { onSalvar(nome.trim(), email.trim()) }
             ) {
                 Text("Salvar")
             }
@@ -434,7 +452,6 @@ private fun EditarDadosDialog(
         }
     )
 }
-
 
 @Composable
 private fun MensagemDialog(
@@ -453,7 +470,6 @@ private fun MensagemDialog(
         }
     )
 }
-
 
 @Composable
 private fun TituloSecao(titulo: String) {

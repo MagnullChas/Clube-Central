@@ -4,6 +4,7 @@ import android.content.Context
 import br.pucpr.clubecentral.data.local.AppDatabase
 import br.pucpr.clubecentral.data.local.EventoDao
 import br.pucpr.clubecentral.data.local.PerfilDao
+import br.pucpr.clubecentral.data.local.UsuarioDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,5 +36,12 @@ object AppModule {
         database: AppDatabase
     ): PerfilDao {
         return database.perfilDao()
+    }
+
+    @Provides
+    fun provideUsuarioDao(
+        database: AppDatabase
+    ): UsuarioDao {
+        return database.usuarioDao()
     }
 }
