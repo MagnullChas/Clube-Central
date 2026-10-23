@@ -1,4 +1,3 @@
-
 package br.pucpr.clubecentral.data.local
 
 import androidx.room.Dao
@@ -27,4 +26,11 @@ interface UsuarioDao {
 
     @Query("UPDATE usuarios SET sessaoAtiva = 0 WHERE id = :usuarioId")
     suspend fun encerrarSessao(usuarioId: Int)
+
+    @Query("UPDATE usuarios SET nome = :nome, email = :email WHERE id = :usuarioId")
+    suspend fun atualizarDadosPessoais(
+        usuarioId: Int,
+        nome: String,
+        email: String
+    ): Int
 }

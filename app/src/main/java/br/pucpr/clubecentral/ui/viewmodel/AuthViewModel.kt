@@ -1,4 +1,3 @@
-
 package br.pucpr.clubecentral.ui.viewmodel
 
 import androidx.compose.runtime.getValue
@@ -128,6 +127,44 @@ class AuthViewModel @Inject constructor(
                 mensagem = null
             } catch (_: Exception) {
                 mensagem = "Não foi possível encerrar a sessão."
+            } finally {
+                carregando = false
+            }
+        }
+    }
+
+    fun atualizarDadosPessoais(
+        nome: String,
+        email: String,
+        onResultado: (Boolean) -> Unit
+    ) {
+        val usuarioAtual = usuarioAutenticado
+
+        if (usuarioAtual == null) {
+            mensagem = "Nenhum usuário está autenticado."
+            onResultado(false)
+            return
+        }
+
+        viewModelScope.launch {
+            carregando = true
+            mensagem = null
+
+            try {
+                repository.atualizarDadosPessoais(
+                    usuarioId = usuarioAtual.id,
+                    nome = nome,
+                    email = email
+                ).onSuccess { usuarioAtualizado ->
+                    // Atualiza o usuário na memória do aplicativo.
+                    usuarioAutenticado = usuarioAtualizado
+                    onResultado(true)
+                }.onFailure { erro ->
+                    mensagem = erro.message
+                        ?: "Não foi possível atualizar os dados."
+
+                    onResultado(false)
+                }
             } finally {
                 carregando = false
             }

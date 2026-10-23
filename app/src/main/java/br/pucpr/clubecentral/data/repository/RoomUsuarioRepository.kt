@@ -1,4 +1,3 @@
-
 package br.pucpr.clubecentral.data.repository
 
 import androidx.room.withTransaction
@@ -117,6 +116,55 @@ class RoomUsuarioRepository @Inject constructor(
     override suspend fun encerrarSessao() {
         database.withTransaction {
             usuarioDao.encerrarTodasSessoes()
+        }
+    }
+
+    override suspend fun atualizarDadosPessoais(
+        usuarioId: Int,
+        nome: String,
+        email: String
+    ): Result<Usuario> = runCatching {
+        val nomeLimpo = nome.trim()
+        val emailLimpo = email.trim().lowercase()
+
+        require(nomeLimpo.isNotBlank()) {
+            "Informe seu nome."
+        }
+
+        require(
+            android.util.Patterns.EMAIL_ADDRESS
+                .matcher(emailLimpo)
+                .matches()
+        ) {
+            "Informe um e-mail válido."
+        }
+
+        database.withTransaction {
+            val usuarioAtual = usuarioDao.buscarSessaoAtiva()
+                ?: error("Nenhum usuário está autenticado.")
+
+            require(usuarioAtual.id == usuarioId) {
+                "Não é possível editar outra conta."
+            }
+
+            val usuarioComEmail =
+                usuarioDao.buscarPorEmail(emailLimpo)
+
+            require(
+                usuarioComEmail == null ||
+                        usuarioComEmail.id == usuarioId
+            ) {
+                "Este e-mail já está cadastrado."
+            }
+
+            usuarioDao.atualizarDadosPessoais(
+                usuarioId = usuarioId,
+                nome = nomeLimpo,
+                email = emailLimpo
+            )
+
+            usuarioDao.buscarPorEmail(emailLimpo)
+                ?: error("Não foi possível atualizar os dados.")
         }
     }
 }

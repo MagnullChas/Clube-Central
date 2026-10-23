@@ -167,15 +167,24 @@ fun PerfilScreen(
             EditarDadosDialog(
                 nomeAtual = usuario?.nome ?: "",
                 emailAtual = usuario?.email ?: "",
+                mensagemErro = authViewModel.mensagem,
                 onSalvar = { nome, email ->
-                    // A persistência dos dados da conta será
-                    // implementada na próxima etapa.
-                    viewModel.alterarDadosPessoais(nome, email)
-                    dialogoAtual = null
+                    authViewModel.atualizarDadosPessoais(
+                        nome = nome,
+                        email = email
+                    ) { sucesso ->
+                        if (sucesso) {
+                            dialogoAtual = null
+                        }
+                    }
                 },
-                onFechar = { dialogoAtual = null }
+                onFechar = {
+                    authViewModel.limparMensagem()
+                    dialogoAtual = null
+                }
             )
         }
+
 
         "aparencia" -> {
             SelecaoDialog(
@@ -402,6 +411,7 @@ private fun SelecaoDialog(
 private fun EditarDadosDialog(
     nomeAtual: String,
     emailAtual: String,
+    mensagemErro: String?,
     onSalvar: (String, String) -> Unit,
     onFechar: () -> Unit
 ) {
@@ -433,6 +443,14 @@ private fun EditarDadosDialog(
                     label = { Text("E-mail") },
                     singleLine = true
                 )
+
+                if (mensagemErro != null) {
+                    Text(
+                        text = mensagemErro,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
             }
         },
         confirmButton = {

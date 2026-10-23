@@ -21,4 +21,10 @@ interface UsuarioRepository {
     suspend fun buscarSessaoAtiva(): Usuario?
 
     suspend fun encerrarSessao()
+
+    suspend fun atualizarDadosPessoais(
+        usuarioId: Int,
+        nome: String,
+        email: String
+    ): Result<Usuario>
 }
