@@ -25,6 +25,7 @@ import br.pucpr.clubecentral.ui.screens.CadastroScreen
 import br.pucpr.clubecentral.ui.screens.EventosScreen
 import br.pucpr.clubecentral.ui.screens.LoginScreen
 import br.pucpr.clubecentral.ui.screens.PerfilScreen
+import br.pucpr.clubecentral.ui.screens.MeusClubesScreen
 import br.pucpr.clubecentral.ui.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -117,10 +118,10 @@ fun ClubeCentralApp() {
                             }
                         },
                         icon = {
-                            Text("2")
+                            Text("C")
                         },
                         label = {
-                            Text("Tela 02")
+                            Text("Clubes")
                         }
                     )
 
@@ -202,8 +203,9 @@ fun ClubeCentralApp() {
             }
 
             composable("tela 2") {
-                Box(
-                    modifier = Modifier.fillMaxSize()
+                MeusClubesScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    usuario?.nome ?: ""
                 )
             }
 
