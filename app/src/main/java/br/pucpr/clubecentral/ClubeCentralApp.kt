@@ -217,7 +217,11 @@ fun ClubeCentralApp(perfilViewModel: PerfilViewModel) {
 
             composable("perfil") {
                 PerfilScreen(
-                    authViewModel = authViewModel
+                    authViewModel = authViewModel,
+                    viewModel = perfilViewModel,
+                    onSair = {
+                        authViewModel.sair()
+                    }
                 )
             }
 
