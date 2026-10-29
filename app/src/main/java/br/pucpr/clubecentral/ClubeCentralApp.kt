@@ -25,7 +25,7 @@ import br.pucpr.clubecentral.ui.screens.CadastroScreen
 import br.pucpr.clubecentral.ui.screens.EventosScreen
 import br.pucpr.clubecentral.ui.screens.LoginScreen
 import br.pucpr.clubecentral.ui.screens.PerfilScreen
-import br.pucpr.clubecentral.ui.screens.MeusClubesScreen
+import br.pucpr.clubecentral.ui.screens.ConfiguracoesScreen
 import br.pucpr.clubecentral.ui.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -118,10 +118,10 @@ fun ClubeCentralApp() {
                             }
                         },
                         icon = {
-                            Text("C")
+                            Text("2")
                         },
                         label = {
-                            Text("Clubes")
+                            Text("Tela 02")
                         }
                     )
 
@@ -156,17 +156,17 @@ fun ClubeCentralApp() {
                     )
 
                     NavigationBarItem(
-                        selected = rotaAtual == "tela 5",
+                        selected = rotaAtual == "configuracao",
                         onClick = {
-                            navController.navigate("tela 5") {
+                            navController.navigate("configuracao") {
                                 launchSingleTop = true
                             }
                         },
                         icon = {
-                            Text("5")
+                            Text("C")
                         },
                         label = {
-                            Text("Tela 05")
+                            Text("CONFIG")
                         }
                     )
                 }
@@ -203,9 +203,8 @@ fun ClubeCentralApp() {
             }
 
             composable("tela 2") {
-                MeusClubesScreen(
-                    modifier = Modifier.fillMaxSize(),
-                    usuario?.nome ?: ""
+                Box(
+                    modifier = Modifier.fillMaxSize()
                 )
             }
 
@@ -224,8 +223,12 @@ fun ClubeCentralApp() {
                 )
             }
 
-            composable("tela 5") {
-                Box(
+            composable("configuracao") {
+                ConfiguracoesScreen(
+                    authViewModel = authViewModel,
+                    onSair = {
+                        authViewModel.sair()
+                    },
                     modifier = Modifier.fillMaxSize()
                 )
             }
