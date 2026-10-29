@@ -27,10 +27,11 @@ import br.pucpr.clubecentral.ui.screens.LoginScreen
 import br.pucpr.clubecentral.ui.screens.PerfilScreen
 import br.pucpr.clubecentral.ui.screens.ConfiguracoesScreen
 import br.pucpr.clubecentral.ui.viewmodel.AuthViewModel
+import br.pucpr.clubecentral.ui.viewmodel.PerfilViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClubeCentralApp() {
+fun ClubeCentralApp(perfilViewModel: PerfilViewModel) {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = hiltViewModel()
 
@@ -216,16 +217,14 @@ fun ClubeCentralApp() {
 
             composable("perfil") {
                 PerfilScreen(
-                    authViewModel = authViewModel,
-                    onSair = {
-                        authViewModel.sair()
-                    }
+                    authViewModel = authViewModel
                 )
             }
 
             composable("configuracao") {
                 ConfiguracoesScreen(
                     authViewModel = authViewModel,
+                    viewModel = perfilViewModel,
                     onSair = {
                         authViewModel.sair()
                     },
