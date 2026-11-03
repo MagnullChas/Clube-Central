@@ -1,0 +1,63 @@
+package br.pucpr.clubecentral.di
+
+import android.content.Context
+import br.pucpr.clubecentral.data.local.AppDatabase
+import br.pucpr.clubecentral.data.local.AvisoDao
+import br.pucpr.clubecentral.data.local.ClubeDao
+import br.pucpr.clubecentral.data.local.EventoDao
+import br.pucpr.clubecentral.data.local.PerfilDao
+import br.pucpr.clubecentral.data.local.UsuarioDao
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideDatabase(
+        @ApplicationContext context: Context
+    ): AppDatabase {
+        return AppDatabase.getDatabase(context)
+    }
+
+    @Provides
+    fun provideEventoDao(
+        database: AppDatabase
+    ): EventoDao {
+        return database.eventoDao()
+    }
+
+    @Provides
+    fun providePerfilDao(
+        database: AppDatabase
+    ): PerfilDao {
+        return database.perfilDao()
+    }
+
+    @Provides
+    fun provideUsuarioDao(
+        database: AppDatabase
+    ): UsuarioDao {
+        return database.usuarioDao()
+    }
+
+    @Provides
+    fun provideClubeDao(
+        database: AppDatabase
+    ): ClubeDao {
+        return database.clubeDao()
+    }
+
+    @Provides
+    fun provideAvisoDao(
+        database: AppDatabase
+    ): AvisoDao {
+        return database.avisoDao()
+    }
+}
