@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import br.pucpr.clubecentral.model.Clube
+import br.pucpr.clubecentral.ui.t
 
 @Composable
 fun ClubeCard( clube: Clube, onDetalhesClick: () -> Unit, modifier: Modifier = Modifier) {
@@ -70,7 +71,7 @@ fun ClubeCard( clube: Clube, onDetalhesClick: () -> Unit, modifier: Modifier = M
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("ÁREA DE IMAGEM", style = MaterialTheme.typography.labelSmall)
+                    Text(t("area_imagem"), style = MaterialTheme.typography.labelSmall)
                 }
             }
             Row(
@@ -87,7 +88,7 @@ fun ClubeCard( clube: Clube, onDetalhesClick: () -> Unit, modifier: Modifier = M
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "${clube.membros} membros · ${clube.eventos} eventos",
+                        text = "${clube.membros} ${t("clube_membros")} · ${clube.eventos} ${t("clube_eventos")}",
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -121,18 +122,18 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "SEUS ESPAÇOS",
+                text = t("home_espacos"),
                 style = MaterialTheme.typography.labelMedium
             )
             Text(
-                text = "Olá, $user.",
+                text = "${t("home_ola")} $user",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
             OutlinedTextField(
                 value = busca,
                 onValueChange = { busca = it },
-                placeholder = { Text("Buscar clube") },
+                placeholder = { Text(t("home_buscar")) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -142,12 +143,12 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "MEUS CLUBES",
+                    text = t("home_meus_clubes"),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "%02d ativos".format(filtrados.size),
+                    text = t("home_ativos").format(filtrados.size),
                     style = MaterialTheme.typography.bodySmall
                 )
             }

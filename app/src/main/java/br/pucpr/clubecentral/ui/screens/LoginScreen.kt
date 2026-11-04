@@ -25,6 +25,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
+import br.pucpr.clubecentral.ui.t
 import br.pucpr.clubecentral.ui.viewmodel.AuthViewModel
 
 @Composable
@@ -43,14 +44,14 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Clube Central",
+            text = t("app_nome"),
             style = MaterialTheme.typography.headlineLarge
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Entre na sua conta",
+            text = t("login_subtitulo"),
             style = MaterialTheme.typography.titleMedium
         )
 
@@ -59,7 +60,7 @@ fun LoginScreen(
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("E-mail") },
+            label = { Text(t("email")) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email
@@ -73,7 +74,7 @@ fun LoginScreen(
         OutlinedTextField(
             value = senha,
             onValueChange = { senha = it },
-            label = { Text("Senha") },
+            label = { Text(t("senha")) },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth(),
@@ -102,7 +103,7 @@ fun LoginScreen(
             if (viewModel.carregando) {
                 CircularProgressIndicator()
             } else {
-                Text("Entrar")
+                Text(t("login_entrar"))
             }
         }
 
@@ -110,7 +111,7 @@ fun LoginScreen(
             onClick = onCriarConta,
             enabled = !viewModel.carregando
         ) {
-            Text("Não tem uma conta? Criar perfil")
+            Text(t("login_criar_conta"))
         }
     }
 }

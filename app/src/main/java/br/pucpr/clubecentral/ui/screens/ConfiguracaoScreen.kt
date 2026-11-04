@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import br.pucpr.clubecentral.ui.t
 import br.pucpr.clubecentral.ui.viewmodel.AuthViewModel
 import br.pucpr.clubecentral.ui.viewmodel.PerfilViewModel
 
@@ -63,13 +64,13 @@ fun ConfiguracoesScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            text = "CONFIGURAÇÕES",
+            text = t("config_titulo"),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
 
         )
         Text(
-            text = "Personalize seu Sistema",
+            text = t("config_subtitulo"),
             fontSize = 13.sp,
             color = TextoSecundario,
             fontWeight = FontWeight.Medium
@@ -80,15 +81,15 @@ fun ConfiguracoesScreen(
         Grupo {
 
             Divisor()
-            ItemConfig("Privacidade e segurança", onClick = { dialogoAtual = "privacidade" })
+            ItemConfig(t("privacidade"), onClick = { dialogoAtual = "privacidade" })
             Divisor()
-            ItemConfig("Clubes e permissões", onClick = { dialogoAtual = "clubes" })
+            ItemConfig(t("clubes_permissoes"), onClick = { dialogoAtual = "clubes" })
         }
 
         Spacer(Modifier.height(8.dp))
 
         Text(
-            text = "PREFERÊNCIAS",
+            text = t("config_preferencias"),
             fontSize = 14.sp,
             letterSpacing = 1.sp,
             fontWeight = FontWeight.SemiBold,
@@ -97,19 +98,19 @@ fun ConfiguracoesScreen(
 
         Grupo {
             ItemConfig(
-                titulo = "Notificações",
-                valor = if (viewModel.notificacoesAtivas) "Ativado" else "Desativado",
+                titulo = t("notificacoes"),
+                valor = if (viewModel.notificacoesAtivas) t("ativado") else t("desativado"),
                 onClick = { dialogoAtual = "notificacoes" }
             )
             Divisor()
             ItemConfig(
-                titulo = "Aparência",
+                titulo = t("aparencia"),
                 valor = viewModel.aparencia,
                 onClick = { dialogoAtual = "aparencia" }
             )
             Divisor()
             ItemConfig(
-                titulo = "Idioma",
+                titulo = t("idioma"),
                 valor = viewModel.idioma,
                 onClick = { dialogoAtual = "idioma" }
             )
@@ -123,13 +124,13 @@ fun ConfiguracoesScreen(
     when (dialogoAtual) {
         "notificacoes" -> AlertDialog(
             onDismissRequest = { dialogoAtual = null },
-            title = { Text("Notificações") },
+            title = { Text(t("notificacoes")) },
             text = {
                 Text(
                     if (viewModel.notificacoesAtivas) {
-                        "As notificações estão ATIVAS. Deseja desativá-las?"
+                        t("notif_ativas")
                     } else {
-                        "As notificações estão DESATIVADAS. Deseja ativá-las?"
+                        t("notif_desativadas")
                     }
                 )
             },
@@ -140,19 +141,19 @@ fun ConfiguracoesScreen(
                         dialogoAtual = null
                     }
                 ) {
-                    Text(if (viewModel.notificacoesAtivas) "Desativar" else "Ativar")
+                    Text(if (viewModel.notificacoesAtivas) t("desativar") else t("ativar"))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { dialogoAtual = null }) {
-                    Text("Cancelar")
+                    Text(t("cancelar"))
                 }
             }
         )
 
         "aparencia" -> SelecaoDialog(
-            titulo = "Aparência",
-            opcoes = listOf("Sistema", "Claro", "Escuro"),
+            titulo = t("aparencia"),
+            opcoes = listOf(t("ap_sistema")),
             selecionado = viewModel.aparencia,
             onSelecionar = {
                 viewModel.alterarAparencia(it)
@@ -174,14 +175,14 @@ fun ConfiguracoesScreen(
 
 
         "privacidade" -> MensagemDialog(
-            titulo = "Privacidade e segurança",
-            mensagem = "Esta área poderá reunir as opções de proteção e privacidade da sua conta.",
+            titulo = t("privacidade"),
+            mensagem = t("privacidade_msg"),
             onFechar = { dialogoAtual = null }
         )
 
         "clubes" -> MensagemDialog(
-            titulo = "Clubes e permissões",
-            mensagem = "Aqui poderão ser exibidos os clubes associados ao usuário e suas permissões.",
+            titulo = t("clubes_permissoes"),
+            mensagem = t("clubes_msg"),
             onFechar = { dialogoAtual = null }
         )
 
@@ -223,7 +224,7 @@ private fun SelecaoDialog(
         },
         confirmButton = {
             TextButton(onClick = onFechar) {
-                Text("Fechar")
+                Text(t("fechar"))
             }
         }
     )
@@ -242,7 +243,7 @@ private fun MensagemDialog(
         text = { Text(mensagem) },
         confirmButton = {
             TextButton(onClick = onFechar) {
-                Text("Fechar")
+                Text(t("fechar"))
             }
         }
     )

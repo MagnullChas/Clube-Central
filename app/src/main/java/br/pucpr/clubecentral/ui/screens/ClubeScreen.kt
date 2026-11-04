@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import br.pucpr.clubecentral.model.Aviso
 import br.pucpr.clubecentral.model.Clube
 import br.pucpr.clubecentral.model.Evento
+import br.pucpr.clubecentral.ui.t
 import br.pucpr.clubecentral.ui.viewmodel.ClubeViewModel
 import java.util.Calendar
 
@@ -140,7 +141,7 @@ fun ClubeScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "VISÃO DO CLUBE",
+                text = t("clube_visao"),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -162,16 +163,16 @@ fun ClubeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TituloSecao("AVISOS E ATUALIZAÇÕES")
+                TituloSecao(t("clube_avisos_titulo"))
                 if (ehAdmin) {
                     TextButton(onClick = { avisoEmEdicao = Aviso(clubeId = 0, quando = "", texto = ""); dialogoAviso = true }) {
-                        Text("Adicionar")
+                        Text(t("adicionar"))
                     }
                 }
             }
             if (viewModel.avisos.isEmpty()) {
                 Text(
-                    text = "Nenhum aviso.",
+                    text = t("clube_nenhum_aviso"),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -208,10 +209,10 @@ fun ClubeScreen(
             }
 
             Spacer(modifier = Modifier.height(4.dp))
-            TituloSecao("EVENTOS MARCADOS")
+            TituloSecao(t("clube_eventos_marcados"))
             if (eventos.isEmpty()) {
                 Text(
-                    text = "Nenhum evento marcado.",
+                    text = t("clube_nenhum_evento"),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -230,14 +231,14 @@ fun ClubeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TituloSecao("INFORMAÇÕES DO CLUBE")
+                TituloSecao(t("clube_informacoes"))
                 if (ehAdmin) {
-                    TextButton(onClick = { dialogoInfo = true }) { Text("Editar") }
+                    TextButton(onClick = { dialogoInfo = true }) { Text(t("editar")) }
                 }
             }
-            ItemInformacao(Icons.Outlined.CalendarMonth, "ENCONTROS SEMANAIS", clube?.encontros.orEmpty())
-            ItemInformacao(Icons.Outlined.LocationOn, "LOCAL", clube?.local.orEmpty())
-            ItemInformacao(Icons.Outlined.Person, "RESPONSÁVEL", clube?.responsavel.orEmpty())
+            ItemInformacao(Icons.Outlined.CalendarMonth, t("clube_encontros_caps"), clube?.encontros.orEmpty())
+            ItemInformacao(Icons.Outlined.LocationOn, t("clube_local_caps"), clube?.local.orEmpty())
+            ItemInformacao(Icons.Outlined.Person, t("clube_responsavel_caps"), clube?.responsavel.orEmpty())
         }
     }
 
@@ -275,28 +276,28 @@ private fun DialogoAviso(
 
     AlertDialog(
         onDismissRequest = onCancelar,
-        title = { Text(if (aviso == null || aviso.id == 0) "Novo aviso" else "Editar aviso") },
+        title = { Text(if (aviso == null || aviso.id == 0) t("clube_novo_aviso") else t("clube_editar_aviso")) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(
                     value = quando,
                     onValueChange = { quando = it },
-                    label = { Text("Quando (ex.: HOJE, 12 OUT)") },
+                    label = { Text(t("clube_aviso_quando")) },
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = texto,
                     onValueChange = { texto = it },
-                    label = { Text("Aviso") }
+                    label = { Text(t("clube_aviso")) }
                 )
             }
         },
         confirmButton = {
             TextButton(onClick = { onSalvar(quando, texto) }, enabled = texto.isNotBlank()) {
-                Text("Salvar")
+                Text(t("salvar"))
             }
         },
-        dismissButton = { TextButton(onClick = onCancelar) { Text("Cancelar") } }
+        dismissButton = { TextButton(onClick = onCancelar) { Text(t("cancelar")) } }
     )
 }
 
@@ -312,33 +313,33 @@ private fun DialogoInformacoes(
 
     AlertDialog(
         onDismissRequest = onCancelar,
-        title = { Text("Editar informações") },
+        title = { Text(t("clube_editar_info")) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(
                     value = encontros,
                     onValueChange = { encontros = it },
-                    label = { Text("Encontros semanais") },
+                    label = { Text(t("clube_encontros")) },
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = local,
                     onValueChange = { local = it },
-                    label = { Text("Local") },
+                    label = { Text(t("clube_local")) },
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = responsavel,
                     onValueChange = { responsavel = it },
-                    label = { Text("Responsável") },
+                    label = { Text(t("clube_responsavel")) },
                     singleLine = true
                 )
             }
         },
         confirmButton = {
-            TextButton(onClick = { onSalvar(encontros, local, responsavel) }) { Text("Salvar") }
+            TextButton(onClick = { onSalvar(encontros, local, responsavel) }) { Text(t("salvar")) }
         },
-        dismissButton = { TextButton(onClick = onCancelar) { Text("Cancelar") } }
+        dismissButton = { TextButton(onClick = onCancelar) { Text(t("cancelar")) } }
     )
 }
 
@@ -431,13 +432,13 @@ private fun Calendario(
                         .background(MaterialTheme.colorScheme.onSurface)
                 )
                 Text(
-                    text = "  Evento",
+                    text = t("clube_legenda_evento"),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 if (ehAdmin) {
                     Text(
-                        text = "   ·   Toque em um dia para marcar um evento",
+                        text = t("clube_toque_dia"),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -530,7 +531,7 @@ private fun ItemInformacao(icone: ImageVector, rotulo: String, valor: String) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = valor.ifBlank { "Não informado" },
+                    text = valor.ifBlank { t("clube_nao_informado") },
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold
                 )

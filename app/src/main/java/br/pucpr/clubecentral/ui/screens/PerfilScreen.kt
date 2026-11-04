@@ -40,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import br.pucpr.clubecentral.ui.t
 import br.pucpr.clubecentral.ui.viewmodel.AuthViewModel
 import br.pucpr.clubecentral.ui.viewmodel.PerfilViewModel
 
@@ -69,7 +70,7 @@ fun PerfilScreen(
             verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
             Text(
-                text = "CONTA PESSOAL",
+                text = t("perfil_conta"),
                 fontSize = 11.sp,
                 letterSpacing = 2.sp,
                 color = TextoSecundario,
@@ -77,7 +78,7 @@ fun PerfilScreen(
             )
 
             Text(
-                text = "Seu perfil",
+                text = t("perfil_titulo"),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -91,25 +92,25 @@ fun PerfilScreen(
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            TituloSecao("CONFIGURAÇÕES DE PERFIL")
+            TituloSecao(t("perfil_config"))
 
             GrupoConfiguracoes {
                 ItemConfiguracao(
-                    titulo = "Editar dados pessoais",
+                    titulo = t("perfil_editar_dados"),
                     onClick = { dialogoAtual = "dados" }
                 )
 
                 DivisorPerfil()
 
                 ItemConfiguracao(
-                    titulo = "Privacidade e segurança",
+                    titulo = t("privacidade"),
                     onClick = { dialogoAtual = "privacidade" }
                 )
 
                 DivisorPerfil()
 
                 ItemConfiguracao(
-                    titulo = "Clubes e permissões",
+                    titulo = t("clubes_permissoes"),
                     onClick = { dialogoAtual = "clubes" }
                 )
             }
@@ -121,7 +122,7 @@ fun PerfilScreen(
                 .fillMaxWidth()
                 .height(48.dp)
         ) {
-            Text("Sair da conta")
+            Text(t("sair_conta"))
         }
 
         Spacer(modifier = Modifier.height(4.dp))
@@ -152,16 +153,16 @@ fun PerfilScreen(
 
         "privacidade" -> {
             MensagemDialog(
-                titulo = "Privacidade e segurança",
-                mensagem = "Esta área poderá reunir as opções de proteção e privacidade da sua conta.",
+                titulo = t("privacidade"),
+                mensagem = t("privacidade_msg"),
                 onFechar = { dialogoAtual = null }
             )
         }
 
         "clubes" -> {
             MensagemDialog(
-                titulo = "Clubes e permissões",
-                mensagem = "Aqui poderão ser exibidos os clubes associados ao usuário e suas permissões.",
+                titulo = t("clubes_permissoes"),
+                mensagem = t("clubes_msg"),
                 onFechar = { dialogoAtual = null }
             )
         }
@@ -169,9 +170,9 @@ fun PerfilScreen(
         "sair" -> {
             AlertDialog(
                 onDismissRequest = { dialogoAtual = null },
-                title = { Text("Sair da conta") },
+                title = { Text(t("sair_conta")) },
                 text = {
-                    Text("Deseja realmente encerrar sua sessão?")
+                    Text(t("sair_confirmar"))
                 },
                 confirmButton = {
                     TextButton(
@@ -180,14 +181,14 @@ fun PerfilScreen(
                             onSair()
                         }
                     ) {
-                        Text("Sair")
+                        Text(t("sair"))
                     }
                 },
                 dismissButton = {
                     TextButton(
                         onClick = { dialogoAtual = null }
                     ) {
-                        Text("Cancelar")
+                        Text(t("cancelar"))
                     }
                 }
             )
@@ -283,7 +284,7 @@ private fun SelecaoDialog(
         },
         confirmButton = {
             TextButton(onClick = onFechar) {
-                Text("Fechar")
+                Text(t("fechar"))
             }
         }
     )
@@ -307,7 +308,7 @@ private fun EditarDadosDialog(
 
     AlertDialog(
         onDismissRequest = onFechar,
-        title = { Text("Editar dados pessoais") },
+        title = { Text(t("perfil_editar_dados")) },
         text = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -315,14 +316,14 @@ private fun EditarDadosDialog(
                 OutlinedTextField(
                     value = nome,
                     onValueChange = { nome = it },
-                    label = { Text("Nome") },
+                    label = { Text(t("nome")) },
                     singleLine = true
                 )
 
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
-                    label = { Text("E-mail") },
+                    label = { Text(t("email")) },
                     singleLine = true
                 )
 
@@ -342,12 +343,12 @@ private fun EditarDadosDialog(
                             .matcher(email.trim()).matches(),
                 onClick = { onSalvar(nome.trim(), email.trim()) }
             ) {
-                Text("Salvar")
+                Text(t("salvar"))
             }
         },
         dismissButton = {
             TextButton(onClick = onFechar) {
-                Text("Cancelar")
+                Text(t("cancelar"))
             }
         }
     )
@@ -365,7 +366,7 @@ private fun MensagemDialog(
         text = { Text(mensagem) },
         confirmButton = {
             TextButton(onClick = onFechar) {
-                Text("Fechar")
+                Text(t("fechar"))
             }
         }
     )

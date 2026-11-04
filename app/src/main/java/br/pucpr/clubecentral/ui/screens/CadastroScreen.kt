@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import br.pucpr.clubecentral.ui.t
 import br.pucpr.clubecentral.ui.viewmodel.AuthViewModel
 
 @Composable
@@ -45,7 +46,7 @@ fun CadastroScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Criar perfil",
+            text = t("cadastro_titulo"),
             style = MaterialTheme.typography.headlineMedium
         )
 
@@ -54,7 +55,7 @@ fun CadastroScreen(
         OutlinedTextField(
             value = nome,
             onValueChange = { nome = it },
-            label = { Text("Nome completo") },
+            label = { Text(t("cadastro_nome_completo")) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             enabled = !viewModel.carregando
@@ -65,7 +66,7 @@ fun CadastroScreen(
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("E-mail") },
+            label = { Text(t("email")) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email
@@ -79,7 +80,7 @@ fun CadastroScreen(
         OutlinedTextField(
             value = senha,
             onValueChange = { senha = it },
-            label = { Text("Senha (mínimo 4 caracteres)") },
+            label = { Text(t("cadastro_senha")) },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth(),
@@ -91,7 +92,7 @@ fun CadastroScreen(
         OutlinedTextField(
             value = confirmarSenha,
             onValueChange = { confirmarSenha = it },
-            label = { Text("Confirmar senha") },
+            label = { Text(t("cadastro_confirmar_senha")) },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth(),
@@ -125,7 +126,7 @@ fun CadastroScreen(
             if (viewModel.carregando) {
                 CircularProgressIndicator()
             } else {
-                Text("Criar conta")
+                Text(t("cadastro_criar"))
             }
         }
 
@@ -133,7 +134,7 @@ fun CadastroScreen(
             onClick = onVoltar,
             enabled = !viewModel.carregando
         ) {
-            Text("Já tem uma conta? Voltar ao login")
+            Text(t("cadastro_voltar"))
         }
     }
 }

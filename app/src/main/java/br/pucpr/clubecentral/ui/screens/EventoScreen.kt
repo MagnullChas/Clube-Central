@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import br.pucpr.clubecentral.ui.t
 import br.pucpr.clubecentral.ui.viewmodel.EventosViewModel
 
 @Composable
@@ -34,7 +35,7 @@ fun EventosScreen(
         OutlinedTextField(
             value = viewModel.nome,
             onValueChange = { viewModel.alterarNome(it) },
-            label = { Text("Nome do evento") },
+            label = { Text(t("evento_nome")) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -42,7 +43,7 @@ fun EventosScreen(
         OutlinedTextField(
             value = viewModel.data,
             onValueChange = { viewModel.alterarData(it) },
-            label = { Text("Data") },
+            label = { Text(t("evento_data")) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -50,7 +51,7 @@ fun EventosScreen(
         OutlinedTextField(
             value = viewModel.descricao,
             onValueChange = { viewModel.alterarDescricao(it) },
-            label = { Text("Descrição") },
+            label = { Text(t("evento_descricao")) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -67,7 +68,7 @@ fun EventosScreen(
                         viewModel.cancelarEdicao()
                     }
                 ) {
-                    Text("Cancelar")
+                    Text(t("cancelar"))
                 }
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -86,9 +87,9 @@ fun EventosScreen(
             ) {
                 Text(
                     if (viewModel.eventoEditando == null)
-                        "Adicionar"
+                        t("adicionar")
                     else
-                        "Salvar alterações"
+                        t("salvar_alteracoes")
                 )
             }
         }
@@ -121,7 +122,7 @@ fun EventosScreen(
                         )
 
                         Text(
-                            text = "Data: ${evento.data}",
+                            text = t("evento_data_valor ${evento.data}"),
                             style = MaterialTheme.typography.bodyMedium
                         )
 
@@ -148,7 +149,7 @@ fun EventosScreen(
                                     viewModel.iniciarEdicao(evento)
                                 }
                             ) {
-                                Text("Editar")
+                                Text(t("editar"))
                             }
 
                             TextButton(
@@ -156,7 +157,7 @@ fun EventosScreen(
                                     viewModel.excluir(evento)
                                 }
                             ) {
-                                Text("Excluir")
+                                Text(t("excluir"))
                             }
                         }
                     }

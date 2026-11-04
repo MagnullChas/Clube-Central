@@ -6,9 +6,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import br.pucpr.clubecentral.ui.LocalIdioma
 import br.pucpr.clubecentral.ui.theme.ClubeCentralTheme
 import br.pucpr.clubecentral.ui.viewmodel.PerfilViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import br.pucpr.clubecentral.ui.screens.HomeScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -27,9 +35,12 @@ class MainActivity : ComponentActivity() {
                 else -> isSystemInDarkTheme() //"Tema do sistema do dispositivo"
             }
 
-            ClubeCentralTheme(darkTheme = escuro) {
-                ClubeCentralApp(perfilViewModel = perfilViewModel)
+            CompositionLocalProvider(LocalIdioma provides perfilViewModel.idioma) {
+                ClubeCentralTheme(darkTheme = escuro) {
+                    ClubeCentralApp(perfilViewModel = perfilViewModel)
+                }
             }
+
         }
     }
 }
